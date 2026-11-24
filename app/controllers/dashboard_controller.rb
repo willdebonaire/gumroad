@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class DashboardController < Sellers::BaseController
-  include ActionView::Helpers::NumberHelper, CurrencyHelper
-
   before_action :check_payment_details, only: :index
 
   layout "inertia", only: :index
@@ -25,34 +23,6 @@ class DashboardController < Sellers::BaseController
       render inertia: "Dashboard/Index",
              props: { creator_home: props }
     end
-  end
-
-  def customers_count
-    authorize :dashboard
-
-    count = current_seller.all_sales_count
-    render json: { success: true, value: number_with_delimiter(count) }
-  end
-
-  def total_revenue
-    authorize :dashboard
-
-    revenue = current_seller.gross_sales_cents_total_as_seller
-    render json: { success: true, value: formatted_dollar_amount(revenue) }
-  end
-
-  def active_members_count
-    authorize :dashboard
-
-    count = current_seller.active_members_count
-    render json: { success: true, value: number_with_delimiter(count) }
-  end
-
-  def monthly_recurring_revenue
-    authorize :dashboard
-
-    revenue = current_seller.monthly_recurring_revenue
-    render json: { success: true, value: formatted_dollar_amount(revenue) }
   end
 
   def download_tax_form
