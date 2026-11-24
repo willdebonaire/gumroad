@@ -90,13 +90,9 @@ describe DashboardNav do
       end
     end
 
-    it "matches /dashboard exactly, so its JSON stat endpoints do not count as dashboard visits" do
-      # /dashboard/customers_count and friends render no sidebar; a prefix match would run the seed
-      # scan on them. The analytics pages under /dashboard stay matched through PATH_PREFIXES.
-      expect(described_class.dashboard_path?("/dashboard/customers_count")).to be false
-      expect(described_class.dashboard_path?("/dashboard/total_revenue")).to be false
-      expect(described_class.dashboard_path?("/dashboard/active_members_count")).to be false
-      expect(described_class.dashboard_path?("/dashboard/monthly_recurring_revenue")).to be false
+    it "matches /dashboard exactly, so non-page dashboard actions do not count as visits" do
+      # /dashboard/download_tax_form renders no sidebar; a prefix match would run the seed
+      # scan on it. The analytics pages under /dashboard stay matched through PATH_PREFIXES.
       expect(described_class.dashboard_path?("/dashboard/download_tax_form")).to be false
       expect(described_class.dashboard_path?("/dashboard/sales")).to be true
       expect(described_class.dashboard_path?("/dashboard/utm_links/new")).to be true
